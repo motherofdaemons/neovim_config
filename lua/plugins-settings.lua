@@ -34,7 +34,7 @@ local on_attach = function(_, bufnr)
 end
 
 -- format files on save using lsp
-vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()]]
+-- vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()]]
 
 
 -- Add additional capabilities supported by nvim-cmp
@@ -130,3 +130,8 @@ vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+-- you can use telescope for other plugins as well
+
+
+-- enable light bulb automatically
+require('nvim-lightbulb').setup({autocmd = {enabled = true}})

@@ -71,6 +71,30 @@ return require('packer').startup(function(use)
     end,
   })
 
+  -- Code actions
+  require('packer').use({
+    'weilbith/nvim-code-action-menu',
+    cmd = 'CodeActionMenu',
+  })
+
+  -- light buld like vs code so I know when I can do code actions
+  use {
+    'kosayoda/nvim-lightbulb',
+    requires = 'antoinemadec/FixCursorHold.nvim',
+  }
+
+  -- Tree sitter
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = function()
+        local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+        ts_update()
+    end,
+  }
+
+  -- indent lines
+  use 'lukas-reineke/indent-blankline.nvim'
+
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
