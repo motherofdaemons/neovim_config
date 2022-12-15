@@ -43,33 +43,17 @@ return require('packer').startup(function(use)
     requires = { { 'nvim-lua/plenary.nvim' } }
   }
 
-  -- Neo-tree
-  -- Unless you are still migrating, remove the deprecated commands from v1.x
-  vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
-
+  -- nvim-tree
   use {
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v2.x",
+    'nvim-tree/nvim-tree.lua',
     requires = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-      "MunifTanjim/nui.nvim",
-    }
+      'nvim-tree/nvim-web-devicons', -- optional, for file icons
+    },
+    tag = 'nightly' -- optional, updated every week. (see issue #1193)
   }
 
   -- open files where I left off
   use 'farmergreg/vim-lastplace'
-
-  -- auto save
-  use({
-    "Pocco81/auto-save.nvim",
-    config = function()
-      require("auto-save").setup {
-        -- your config goes here
-        -- or just leave it empty :)
-      }
-    end,
-  })
 
   -- Code actions
   require('packer').use({
@@ -94,6 +78,9 @@ return require('packer').startup(function(use)
 
   -- indent lines
   use 'lukas-reineke/indent-blankline.nvim'
+
+  -- git support
+  use 'lewis6991/gitsigns.nvim'
 
 
   -- Automatically set up your configuration after cloning packer.nvim

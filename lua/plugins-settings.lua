@@ -40,6 +40,16 @@ end
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+local lspconfig = require('lspconfig')
+
+local servers = { 'ccls', 'bashls' }
+for _,lsp in ipairs(servers) do
+  lspconfig[lsp].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+  }
+end
+
 -- rust-tools setup
 local rt = require("rust-tools")
 
@@ -55,7 +65,7 @@ rt.runnables.runnables()
 
 
 -- lua support for neovim stuff since I don't really write lua
-require'lspconfig'.sumneko_lua.setup {
+lspconfig.sumneko_lua.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   settings = {
@@ -135,3 +145,68 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
 -- enable light bulb automatically
 require('nvim-lightbulb').setup({autocmd = {enabled = true}})
+
+-- nvim-tree setup
+-- disable netrw at the very start of your init.lua (strongly advised)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- set termguicolors to enable highlight groups
+vim.opt.termguicolors = true
+
+-- setup nvim-tree with the settings I want
+require("nvim-tree").setup({
+  update_focused_file = {
+    enable = true,
+  }
+})
+
+-- auto close if nvimtree is the only thing left
+vim.api.nvim_create_autocmd("BufEnter", {
+  nested = true,
+  callback = function()
+    if #vim.api.nvim_list_wins() == 1 and require('nvim-tree.utils').is_nvim_tree_buf(0) then
+      vim.cmd "quit"
+    end
+  end
+})
+
+require('gitsigns').setup({
+  on_attach = function (bufnr)
+    local gs = package.loaded.gitsigns
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    -- Navigation
+    map('n', ']c', function()
+      if vim.wo.diff then return ']c' end
+      vim.schedule(function() gs.next_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
+
+    map('n', '[c', function()
+      if vim.wo.diff then return '[c' end
+      vim.schedule(function() gs.prev_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
+
+    -- Actions
+    map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
+    map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
+    map('n', '<leader>hS', gs.stage_buffer)
+    map('n', '<leader>hu', gs.undo_stage_hunk)
+    map('n', '<leader>hR', gs.reset_buffer)
+    map('n', '<leader>hp', gs.preview_hunk)
+    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
+    map('n', '<leader>tb', gs.toggle_current_line_blame)
+    map('n', '<leader>hd', gs.diffthis)
+    map('n', '<leader>hD', function() gs.diffthis('~') end)
+    map('n', '<leader>td', gs.toggle_deleted)
+
+    -- Text object
+    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  end
+})
