@@ -11,7 +11,7 @@ end
 
 local packer_bootstrap = ensure_packer()
 
-return require('packer').startup(function(use)
+return require('packer').startup({function(use)
   use 'wbthomason/packer.nvim' -- Package manager
 
   -- Dracula theme
@@ -88,4 +88,12 @@ return require('packer').startup(function(use)
   if packer_bootstrap then
     require('packer').sync()
   end
-end)
+end,
+-- Use a floating window instead of a buffer for packer
+config = {
+  display = {
+    open_fn = function ()
+      return require('packer.util').float({ border = 'single' })
+    end
+  }
+}})
