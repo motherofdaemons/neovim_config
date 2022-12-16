@@ -2,7 +2,7 @@ require('plugins')
 require('plugins-settings')
 
 -- Color scheme
-vim.cmd[[colorscheme dracula]]
+vim.cmd [[colorscheme dracula]]
 
 -- tabs are spaces
 vim.opt.expandtab = true

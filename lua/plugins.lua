@@ -11,7 +11,7 @@ end
 
 local packer_bootstrap = ensure_packer()
 
-return require('packer').startup({function(use)
+return require('packer').startup({ function(use)
   use 'wbthomason/packer.nvim' -- Package manager
 
   -- Dracula theme
@@ -23,19 +23,30 @@ return require('packer').startup({function(use)
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
 
-  -- LSP
-  use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
-  use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
-  use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
-  use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
-  use 'L3MON4D3/LuaSnip' -- Snippets plugin
+  use {
+    'VonHeikemen/lsp-zero.nvim',
+    requires = {
+      -- LSP Support
+      { 'neovim/nvim-lspconfig' },
+      { 'williamboman/mason.nvim' },
+      { 'williamboman/mason-lspconfig.nvim' },
 
-  -- rust support
-  use 'simrat39/rust-tools.nvim' -- Better support for rust-anaylzer than default LSP
+      -- LSP Status
+      { 'j-hui/fidget.nvim' },
 
-  -- Debugging
-  use 'nvim-lua/plenary.nvim'
-  use 'mfussenegger/nvim-dap'
+      -- Autocompletion
+      { 'hrsh7th/nvim-cmp' },
+      { 'hrsh7th/cmp-buffer' },
+      { 'hrsh7th/cmp-path' },
+      { 'saadparwaiz1/cmp_luasnip' },
+      { 'hrsh7th/cmp-nvim-lsp' },
+      { 'hrsh7th/cmp-nvim-lua' },
+
+      -- Snippets
+      { 'L3MON4D3/LuaSnip' },
+      { 'rafamadriz/friendly-snippets' },
+    }
+  }
 
   -- Telescpoe fzf
   use {
@@ -71,8 +82,8 @@ return require('packer').startup({function(use)
   use {
     'nvim-treesitter/nvim-treesitter',
     run = function()
-        local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
-        ts_update()
+      local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+      ts_update()
     end,
   }
 
@@ -83,17 +94,20 @@ return require('packer').startup({function(use)
   use 'lewis6991/gitsigns.nvim'
 
 
+  -- Formatting
+  use 'mhartington/formatter.nvim'
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
     require('packer').sync()
   end
 end,
--- Use a floating window instead of a buffer for packer
-config = {
-  display = {
-    open_fn = function ()
-      return require('packer.util').float({ border = 'single' })
-    end
-  }
-}})
+  -- Use a floating window instead of a buffer for packer
+  config = {
+    display = {
+      open_fn = function()
+        return require('packer.util').float({ border = 'single' })
+      end
+    }
+  } })
