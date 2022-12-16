@@ -17,6 +17,8 @@ return require('packer').startup({ function(use)
   -- Dracula theme
   use 'Mofiqul/dracula.nvim'
 
+  use 'kyazdani42/nvim-web-devicons'
+
   -- LuaLine
   use {
     'nvim-lualine/lualine.nvim',
@@ -97,12 +99,27 @@ return require('packer').startup({ function(use)
   -- Formatting
   use 'mhartington/formatter.nvim'
 
+  -- a plugin to easily view all problems
+  -- Lua
+  use {
+    "folke/trouble.nvim",
+    requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("trouble").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
     require('packer').sync()
   end
 end,
+
   -- Use a floating window instead of a buffer for packer
   config = {
     display = {
@@ -110,4 +127,5 @@ end,
         return require('packer.util').float({ border = 'single' })
       end
     }
-  } })
+  }
+})
