@@ -25,6 +25,7 @@ return require('packer').startup({ function(use)
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
 
+  -- Easy lsp setup
   use {
     'VonHeikemen/lsp-zero.nvim',
     requires = {
@@ -47,6 +48,9 @@ return require('packer').startup({ function(use)
       -- Snippets
       { 'L3MON4D3/LuaSnip' },
       { 'rafamadriz/friendly-snippets' },
+
+      -- I want rust tools too
+      { 'simrat39/rust-tools.nvim' },
     }
   }
 
